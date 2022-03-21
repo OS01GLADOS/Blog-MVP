@@ -28,4 +28,4 @@ python_version = "3.8"
 
 [scripts]
 runserver = "python manage.py runserver"
-unicorn = "gunicorn DjangoBlogTutorial.wsgi"
+unicorn = "gunicorn DjangoBlogTutorial.wsgi --bind 0.0.0.0:8000  --workers 1"

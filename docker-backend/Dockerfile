@@ -7,3 +7,4 @@ ENV PYTHONUNBUFFERED=1
 
 COPY ./docker-backend /code
 RUN pip install -r requirements.txt
+
