@@ -20,4 +20,3 @@ services:
       - ./docker-backend/.env
     ports:
       - "8000:8000"
-    command: /usr/local/bin/gunicorn DjangoBlogTutorial.wsgi:application -b :8000
