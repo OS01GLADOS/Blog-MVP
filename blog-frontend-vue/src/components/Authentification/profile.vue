@@ -10,6 +10,18 @@ export default{
     async mounted(){
         await this.onMount()
     },
+    computed:{
+        styled_date:{
+            get(){
+                let date = new Date(this.item.registration_date);
+                {
+                    const options =  {month: 'long', day:'numeric', year:'numeric'}
+                    const locale = new Date().locale
+                    return date.toLocaleString(locale,options)
+                }
+            }
+        },
+    },
     data() {
         return {
             isLoading: true,
@@ -114,7 +126,7 @@ export default{
         <!-- some info -->
             <h4>Username: {{item.username}}</h4>
             <h4>email: {{item.email}}</h4>
-            <p>registration date: {{item.registration_date}}</p>
+            <p>registration date: {{styled_date}}</p>
         <div>
             <h1>Change User Info</h1>
             <form @submit.prevent="handleSubmit">

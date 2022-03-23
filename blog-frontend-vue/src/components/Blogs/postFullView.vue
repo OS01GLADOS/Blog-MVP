@@ -31,6 +31,16 @@ export default{
                 })
     },
     computed:{
+        styled_date:{
+            get(){
+                let date = new Date(this.publish_date);
+                {
+                    const options =  {month: 'long', day:'numeric', year:'numeric', hour:'numeric', minute:'numeric', seconds:'numeric'}
+                    const locale = new Date().locale
+                    return date.toLocaleString(locale,options)
+                }
+            }
+        },
         styled_body:{
                 get(){
                     const re = /https?:\/\/www.youtube.com\/watch\?v=(\S*)/;
@@ -40,9 +50,7 @@ export default{
                     res = res.replace(re1, function(x){
                         return x.replace(/\d/, function(z){
                             if(pics1.length >0){
-                            console.log(z)
                             let index = z
-                            console.log(index)
                             return pics1[index]['image']
                         }
                         return ''
@@ -60,7 +68,6 @@ export default{
     methods:{
         getLink(id){
             if(this.pics.length >0){
-                console.log(id)
                 return this.pics[id]['image']
             }
             return ''
@@ -72,6 +79,6 @@ export default{
     <div class="container">
                 <h1>{{title}}</h1>
                 <p v-html="styled_body"></p>
-                <p class="small">{{publish_date}}  <router-link :to="{name: 'authorBlog', query:{ 'author':author}}">{{author}}</router-link></p>
+                <p class="small">{{styled_date}}  <router-link :to="{name: 'authorBlog', query:{ 'author':author}}">{{author}}</router-link></p>
             </div>
 </template>

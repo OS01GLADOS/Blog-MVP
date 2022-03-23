@@ -41,6 +41,7 @@ export default {
 
           document.cookie="VueBlog=dumpcookie;max-age=0";
           document.cookie="VueBlogRefresh=dumpcookie;max-age=0";
+          document.cookie="UserId=dumpcookie;max-age=0";
           this.$router.push({name:'Home'})
         }
     }
