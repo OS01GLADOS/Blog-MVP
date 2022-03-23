@@ -13,6 +13,7 @@ export default{
     },
     components:{postVue},
     async mounted() {
+        this.$emit("mounted");
         await this.handleClick()
     },
     watch:{

@@ -32,6 +32,7 @@ export default {
         }
     },
     async mounted(){
+        this.$emit("mounted");
         await this.set_submit_value()
     },
     methods:{

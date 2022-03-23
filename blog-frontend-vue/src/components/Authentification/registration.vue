@@ -5,6 +5,9 @@ import HOST from "../../host"
 export default {
     name: 'registration',
     components: { CustomInput },
+    mounted: function() {
+        this.$emit("mounted");
+    },
     data(){
         return{
             inputs:[

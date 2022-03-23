@@ -43,6 +43,7 @@ export default{
     },
     methods: {
         async onMount(){
+            this.$emit("mounted");
             const token = getCookie('VueBlog')
             const requestOptions = {
                 method: "GET",

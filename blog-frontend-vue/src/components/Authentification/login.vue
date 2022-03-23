@@ -5,6 +5,9 @@ import HOST from "../../host"
 export default {
     name: "login",
     components: { CustomInput },
+    mounted: function() {
+        this.$emit("mounted");
+    },
     data(){
         return{
             inputs:[
@@ -44,6 +47,7 @@ export default {
                     document.cookie="VueBlogRefresh=dumpcookie;max-age=0";  
                     document.cookie ='VueBlog='+data.access
                     document.cookie ='VueBlogRefresh='+data.refresh
+                    this.$router.push({name: 'Home'})
                     })
             .catch(error => {
                 this.errorMessage = error

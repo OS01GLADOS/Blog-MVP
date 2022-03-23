@@ -1,3 +1,3 @@
-const HOST = 'http://3.236.212.102:8000'
+const HOST = 'http://127.0.0.1:8000'
 
 export default HOST
