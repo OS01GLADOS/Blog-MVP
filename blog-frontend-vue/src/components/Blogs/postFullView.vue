@@ -4,7 +4,6 @@ import HOST from "../../host"
 export default{
     name: 'post',
     props:['title', 'body','author','publish_date', 'id'],
-    
     data(){
         return{
             data_content: '',

@@ -2,16 +2,19 @@
 
 import postVue from "./post.vue"
 import HOST from "../../host"
+import loadingVue from "../loadingScreen/loading.vue"
 
 export default{
     name:'ShowBlogs',
     data(){
         return{
             items:[],
-            url : HOST+"/api/posts/"
+            url : HOST+"/api/posts/",
+            isLoading: true
             }
     },
-    components:{postVue},
+    components:{postVue, loadingVue
+    },
     async mounted() {
         this.$emit("mounted");
         await this.handleClick()
@@ -36,6 +39,7 @@ export default{
                     return Promise.reject(error)}
                 this.items = data.results
                 this.$forceUpdate();
+                this.isLoading = false
                 })
             .catch(error => {
                 this.errorMessage = error
@@ -49,6 +53,7 @@ export default{
     
 <template>
     <div class="container">
+        <loadingVue v-if="isLoading"></loadingVue>
         <h3>All blogs</h3 >
         <postVue 
             v-for="(item, i) in items"

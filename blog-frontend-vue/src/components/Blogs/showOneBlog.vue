@@ -2,11 +2,13 @@
 import postFullView from "./postFullView.vue"
 import getCookie from "../../getCookie"
 import HOST from "../../host"
+import loadingVue from "../loadingScreen/loading.vue"
 
 export default{
     name: 'ShowOneBlog',
     data(){
         return{
+            isLoading: true,
             item:{} ,
             url: HOST+"/api/posts/",
             user_id: 0,
@@ -15,7 +17,7 @@ export default{
     },
     components:{
         postFullView,
-        
+        loadingVue
     },
     async mounted() {
         await this.onMount()
@@ -56,7 +58,8 @@ export default{
                             return Promise.reject(error)
                         }
                     this.item = data
-                    return data.author_id
+                    this.isLoading = false
+                    return data.author_id    
                 })
                 .catch(error => {
                     this.errorMessage = error
@@ -69,6 +72,7 @@ export default{
 
 <template>
     <div class="mt-2">
+        <loadingVue v-if="isLoading"></loadingVue>
         <router-link class="btn btn-secondary" :to="{name: 'updateBlog', params:{ id: this.$route.params.id} }">update blog</router-link>
         <router-link class="ms-3 btn btn-danger" :to="{name: 'deleteBlog', params:{ id: this.$route.params.id} }">delete blog</router-link>
         <postFullView 

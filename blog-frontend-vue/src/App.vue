@@ -5,14 +5,14 @@
 
   <span v-if="!has_token">
   <router-link :to="{name: 'login'}">Login</router-link> | 
-  <router-link :to="{name: 'register'}">Register</router-link> |
+  <router-link :to="{name: 'register'}">Register</router-link> 
   </span>
   <span v-else>
   <router-link :to="{name: 'userProfile'}">Profile</router-link> | 
   <router-link :to="{name: 'createBlog', query:{ 'new':'True'}}">CreateBlog</router-link> |
   <a href="#" @click="logOut">Log Out</a>
   </span>
-  <router-view @mounted="childMounted"></router-view>
+  <router-view @mounted="childMounted" ></router-view>
 </div>
 </template>
 
@@ -27,8 +27,12 @@ export default {
       has_token: false
     }
   },
+  mounted(){
+    this.childMounted()
+  },
   methods: {
         childMounted: function() {
+          console.log('child mounted')
             let token = getCookie('VueBlog')
             if (typeof token !== 'undefined'){
               this.has_token = true;
@@ -36,10 +40,10 @@ export default {
             console.log(this.has_token)
         },
         logOut(){
+          console.log('logout')
           document.cookie="VueBlog=dumpcookie;max-age=0";
           document.cookie="VueBlogRefresh=dumpcookie;max-age=0";
-          this.$router.push({name: 'Home'})
-          this.childMounted()
+          this.$router.push({name:'Home'})
         }
     }
 }

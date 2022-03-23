@@ -2,15 +2,17 @@
 import customInputVue from "./customInput.vue"
 import getCookie from "../../getCookie"
 import HOST from "../../host"
+import loadingVue from "../loadingScreen/loading.vue"
 
 export default{
     name: 'Profile',
-    components: {customInputVue},
+    components: {customInputVue, loadingVue},
     async mounted(){
         await this.onMount()
     },
     data() {
         return {
+            isLoading: true,
             item:{
                 username: 'dump username',
                 email: 'example@dump.mail',
@@ -60,6 +62,7 @@ export default{
                 this.item = data.results[0]
                 this.inputs[0].value = this.item.username
                 this.inputs[1].value = this.item.email
+                this.isLoading = false
             })
             .catch(error => {
                 this.errorMessage = error
@@ -106,6 +109,7 @@ export default{
 
 <template>
     <div>
+        <loadingVue v-if="isLoading"></loadingVue>
         <h1>User Profile: {{item.username}}</h1>
         <!-- some info -->
             <h4>Username: {{item.username}}</h4>

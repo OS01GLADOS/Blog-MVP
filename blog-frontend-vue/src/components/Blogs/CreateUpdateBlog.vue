@@ -3,12 +3,14 @@ import customInputVue from "../Authentification/customInput.vue"
 import getCookie from "../../getCookie"
 import HOST from "../../host"
 import FileInput from "./fileInput.vue"
+import loadingVue from "../loadingScreen/loading.vue"
 
 export default {
     name: 'registration',
-    components: { customInputVue, FileInput },
+    components: { customInputVue, FileInput, loadingVue },
     data(){
         return{
+            isLoading: true,
             inputs:[
                 {
                     label: "Title",
@@ -36,9 +38,6 @@ export default {
         await this.set_submit_value()
     },
     methods:{
-
-
-
         async onMount(){
             const token = getCookie('VueBlog')
             const requestOptions = {
@@ -76,6 +75,7 @@ export default {
                 this.method = "PUT"
                 this.update = true
             }
+            this.isLoading = false
         },
         addPicField(){
             this.pics.push({
@@ -121,6 +121,7 @@ export default {
 </script>
 
 <template>
+    <loadingVue v-if="isLoading"></loadingVue>
     <form @submit.prevent="handleSubmit">
         <customInputVue
             
@@ -149,11 +150,11 @@ export default {
         <p><input class="btn btn-primary mt-2" type=submit  :value="submit_label"></p>
     </form>
 
-                    <div>
-                    <p>Related pics</p>
-                    <div v-for=" pic in post_pics" :key="pic.id">
-                        <p>{{pic.image_number}}</p>
-                        <img :src="pic.image"/>
-                        </div>
-                </div>
+    <div v-if="update">
+        <p>Related pics</p>
+        <div v-for=" pic in post_pics" :key="pic.id">
+            <p>{{pic.image_number}}</p>
+            <img :src="pic.image" img width="500"/>
+        </div>
+    </div>
 </template>
