@@ -32,15 +32,13 @@ export default {
   },
   methods: {
         childMounted: function() {
-          console.log('child mounted')
             let token = getCookie('VueBlog')
             if (typeof token !== 'undefined'){
               this.has_token = true;
             }
-            console.log(this.has_token)
         },
         logOut(){
-          console.log('logout')
+
           document.cookie="VueBlog=dumpcookie;max-age=0";
           document.cookie="VueBlogRefresh=dumpcookie;max-age=0";
           this.$router.push({name:'Home'})

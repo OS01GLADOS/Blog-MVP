@@ -1,6 +1,7 @@
 <script>
 import CustomInput from "./customInput.vue"
 import HOST from "../../host"
+import getCookie from "../../getCookie";
 
 export default {
     name: "login",
@@ -27,6 +28,28 @@ export default {
             
         },
     methods:{
+        getUser(){
+            const token = getCookie('VueBlog')
+            const requestOptions = {
+                method: "GET",
+                headers: {
+                    'Authorization':' Bearer '+ token
+                }
+            }
+            fetch(HOST+'/api/profiles/?self=true', requestOptions)
+            .then(async response =>{
+                const data = await response.json()
+                if (!response.ok){
+                    const error = (data && data.message) || response.status
+                    return Promise.reject(error)}
+                    document.cookie="UserId=dumpcookie;max-age=0";
+                    document.cookie ='UserId='+data.results[0].id
+            })
+            .catch(error => {
+                this.errorMessage = error
+                console.error('There was an errror!', error)
+                })
+        },
         handleSubmit(){
             let form = new FormData()
             form.append('username', this.inputs[0].value)
@@ -47,6 +70,7 @@ export default {
                     document.cookie="VueBlogRefresh=dumpcookie;max-age=0";  
                     document.cookie ='VueBlog='+data.access
                     document.cookie ='VueBlogRefresh='+data.refresh
+                    this.getUser()
                     this.$router.push({name: 'Home'})
                     })
             .catch(error => {

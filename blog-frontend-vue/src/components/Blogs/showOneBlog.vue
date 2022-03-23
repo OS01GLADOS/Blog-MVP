@@ -11,17 +11,27 @@ export default{
             isLoading: true,
             item:{} ,
             url: HOST+"/api/posts/",
-            user_id: 0,
-            author_id: 0
+            author: false
         }
     },
     components:{
         postFullView,
         loadingVue
     },
+    computed:{
+        isAuthor: {
+            get() {
+                return this.author
+            },
+            set(value){
+                this.author = value
+            }
+    }
+    },
     async mounted() {
         await this.onMount()
     },
+    
     methods:{
         getUser(){
             const token = getCookie('VueBlog')
@@ -59,7 +69,10 @@ export default{
                         }
                     this.item = data
                     this.isLoading = false
-                    return data.author_id    
+                    if (getCookie('UserId')==data.author_id){
+                        this.isAuthor = true
+                    }
+
                 })
                 .catch(error => {
                     this.errorMessage = error
@@ -73,8 +86,8 @@ export default{
 <template>
     <div class="mt-2">
         <loadingVue v-if="isLoading"></loadingVue>
-        <router-link class="btn btn-secondary" :to="{name: 'updateBlog', params:{ id: this.$route.params.id} }">update blog</router-link>
-        <router-link class="ms-3 btn btn-danger" :to="{name: 'deleteBlog', params:{ id: this.$route.params.id} }">delete blog</router-link>
+        <router-link v-if="isAuthor" class="btn btn-secondary" :to="{name: 'updateBlog', params:{ id: this.$route.params.id} }">update blog</router-link>
+        <router-link v-if="isAuthor" class="ms-3 btn btn-danger" :to="{name: 'deleteBlog', params:{ id: this.$route.params.id} }">delete blog</router-link>
         <postFullView 
             :title="item.title"
             :body="item.content"
