@@ -6,8 +6,7 @@ from rest_framework import permissions
 from api.serializers import UserSerializer, GroupSerializer, PostSerializer, ProfileSerializer, PostPictureCRUDSerializer
 from api.permissions import AuthorAndStaffEdit, NoDeletePermission, DenyAccesToOtherUsersProfiles, AllowCreateProfileWithoutAuthentication, UpdateOrDeleteOnly
 
-from users.models import Profile
-from blog.models import Post, PostPicture
+from api.models import Profile, Post, PostPicture
 
 
 import boto3

@@ -1,9 +1,7 @@
 from django.contrib.auth.models import User, Group
 from rest_framework import serializers
-from users.models import Profile
 
-from blog.models import Post, PostPicture
-
+from api.models import Profile, Post, PostPicture
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -95,3 +93,5 @@ class PostSerializer(serializers.HyperlinkedModelSerializer):
         instance.content = validated_data.get('content')
         instance.save()
         return instance
+
+#TODO add comments endpoint
