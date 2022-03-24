@@ -1,7 +1,6 @@
 <script>
 import customInputVue from "../Authentification/customInput.vue"
 import getCookie from "../../getCookie"
-import HOST from "../../host"
 import FileInput from "./fileInput.vue"
 import loadingVue from "../loadingScreen/loading.vue"
 
@@ -10,6 +9,7 @@ export default {
     components: { customInputVue, FileInput, loadingVue },
     data(){
         return{
+            HOST: process.env.VUE_APP_SERVER_URL,
             isLoading: true,
             inputs:[
                 {
@@ -46,7 +46,7 @@ export default {
                         'Authorization':' Bearer '+ token
                         },
             }
-            fetch(HOST+"/api/posts/"+ this.$route.params.id, requestOptions)
+            fetch(this.HOST+"/api/posts/"+ this.$route.params.id, requestOptions)
                 .then(async response => {
                     const data = await response.json()
                     if (!response.ok){
@@ -56,6 +56,7 @@ export default {
                     this.inputs[0].value = data.title
                     this.inputs[1].value = data.content
                     this.post_pics = data.pics
+                    this.isLoading = false
                 })
                 .catch(error => {
                     this.errorMessage = error
@@ -65,22 +66,23 @@ export default {
         async set_submit_value(){
             if (this.$route.query.new === 'True'){
                 this.submit_label = "Create blog"
-                this.url = HOST+"/api/posts/"
+                this.url = this.HOST+"/api/posts/"
                 this.method = "POST"
+                this.isLoading = false
             }
             else{
                 this.submit_label = "Update blog"
-                this.url = HOST+"/api/posts/"+this.$route.params.id+ "/"
+                this.url = this.HOST+"/api/posts/"+this.$route.params.id+ "/"
                 this.onMount()
                 this.method = "PUT"
                 this.update = true
+
             }
-            this.isLoading = false
         },
         addPicField(){
             this.pics.push({
                 s3_folder : 'posts_pictures',
-                api_add_link: HOST+'/api/postPics/'
+                api_add_link: this.HOST+'/api/postPics/'
             })
         },
         handleInput(i){

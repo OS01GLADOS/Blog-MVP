@@ -1,7 +1,6 @@
 <script>
 import customInputVue from "./customInput.vue"
 import getCookie from "../../getCookie"
-import HOST from "../../host"
 import loadingVue from "../loadingScreen/loading.vue"
 
 export default{
@@ -24,6 +23,7 @@ export default{
     },
     data() {
         return {
+            HOST: process.env.VUE_APP_SERVER_URL,
             isLoading: true,
             item:{
                 username: 'dump username',
@@ -52,7 +52,7 @@ export default{
                     type: "password"
                 },
             ],
-            url:HOST+'/api/profiles',
+            url:process.env.VUE_APP_SERVER_URL+'/api/profiles',
         }
     },
     methods: {

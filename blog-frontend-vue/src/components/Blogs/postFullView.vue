@@ -1,20 +1,19 @@
 <script>
-import HOST from "../../host"
-
 export default{
     name: 'post',
     props:['title', 'body','author','publish_date', 'id'],
     data(){
         return{
+            HOST: process.env.VUE_APP_SERVER_URL,
             data_content: '',
-            pics : []
+            data_pics:[]
         }
     },
     mounted(){
             const requestOptions = {
                 method: "GET",
             }
-            fetch(HOST+"/api/posts/"+ this.$route.params.id, requestOptions)
+            fetch(this.HOST+"/api/posts/"+ this.$route.params.id, requestOptions)
                 .then(async response => {
                     const data = await response.json()
                     if (!response.ok){
@@ -22,6 +21,7 @@ export default{
                             return Promise.reject(error)
                         }
                     this.data_content = data.content
+                    console.log(data)
                     this.pics = data.pics
                     return data.author_id
                 })
@@ -31,6 +31,14 @@ export default{
                 })
     },
     computed:{
+        pics:{
+            get(){
+                return this.data_pics
+            },
+            set(value){
+                this.data_pics = value
+            }
+        },
         styled_date:{
             get(){
                 let date = new Date(this.publish_date);

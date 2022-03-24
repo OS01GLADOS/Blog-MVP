@@ -1,16 +1,16 @@
 <script>
 import postFullView from "./postFullView.vue"
 import getCookie from "../../getCookie"
-import HOST from "../../host"
 import loadingVue from "../loadingScreen/loading.vue"
 
 export default{
     name: 'ShowOneBlog',
     data(){
         return{
+            HOST: process.env.VUE_APP_SERVER_URL,
             isLoading: true,
             item:{} ,
-            url: HOST+"/api/posts/",
+            url: process.env.VUE_APP_SERVER_URL+"/api/posts/",
             author: false
         }
     },
@@ -41,7 +41,7 @@ export default{
                     'Authorization':' Bearer '+ token
                 }
             }
-            fetch(HOST+'/api/profiles/?self=true', requestOptions)
+            fetch(this.HOST+'/api/profiles/?self=true', requestOptions)
             .then(async response =>{
                 const data = await response.json()
                 if (!response.ok){

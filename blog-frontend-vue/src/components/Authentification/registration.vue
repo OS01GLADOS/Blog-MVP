@@ -1,6 +1,5 @@
 <script>
 import CustomInput from "./customInput.vue"
-import HOST from "../../host"
 
 export default {
     name: 'registration',
@@ -10,6 +9,7 @@ export default {
     },
     data(){
         return{
+            HOST: process.env.VUE_APP_SERVER_URL,
             inputs:[
                     {
                         label: "Username",
@@ -32,7 +32,7 @@ export default {
                         type: "password"
                     },
                 ],
-                url:HOST+'/api/profiles/'
+                url:process.env.VUE_APP_SERVER_URL+'/api/profiles/'
             }
         },
     methods:{

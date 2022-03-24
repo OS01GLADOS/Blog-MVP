@@ -1,9 +1,13 @@
 <script>
 import getCookie from "../../getCookie";
-import HOST from "../../host";
 
 export default{
     name: "deleteBlogVue",
+    data(){
+        return{
+            HOST: process.env.VUE_APP_SERVER_URL,
+        }
+    },
     methods:{
         goBack(){
             this.$router.push({name: 'Home'})
@@ -16,7 +20,7 @@ export default{
                         'Authorization':' Bearer '+ token
                         },
             }
-            fetch(HOST+"/api/posts/"+this.$route.params.id+"/", requestOptions)
+            fetch(this.HOST+"/api/posts/"+this.$route.params.id+"/", requestOptions)
             .then(async response =>{
                 if (response.status != 204){
                     const error = ('there was an error while deleting') || response.status

@@ -1,6 +1,5 @@
 <script>
 import CustomInput from "./customInput.vue"
-import HOST from "../../host"
 import getCookie from "../../getCookie";
 
 export default {
@@ -11,6 +10,7 @@ export default {
     },
     data(){
         return{
+            HOST: process.env.VUE_APP_SERVER_URL,
             inputs:[
                     {
                         label: "Username",
@@ -23,7 +23,7 @@ export default {
                         type: "password"
                     },
                 ],
-                url:HOST+'/api/token/'
+                url:process.env.VUE_APP_SERVER_URL+'/api/token/'
             }
             
         },
@@ -36,7 +36,7 @@ export default {
                     'Authorization':' Bearer '+ token
                 }
             }
-            fetch(HOST+'/api/profiles/?self=true', requestOptions)
+            fetch(this.HOST+'/api/profiles/?self=true', requestOptions)
             .then(async response =>{
                 const data = await response.json()
                 if (!response.ok){

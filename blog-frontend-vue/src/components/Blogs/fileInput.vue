@@ -1,5 +1,4 @@
 <script>
-import HOST from "../../host";
 import getCookie from "../../getCookie"
 
 export default{
@@ -7,13 +6,14 @@ export default{
     props: ['s3_folder', 'api_add_link','id', 'image_number'],
     data(){
         return{
+            HOST: process.env.VUE_APP_SERVER_URL,
             label: 'Add Picture',
             image: null,
             type: 'file',
             filename: '',
             upload_link: '',
             disable_input: true,
-            api_get_s3_url: HOST+'/api/geterate-upload-link/?filename=',
+            api_get_s3_url: this.HOST+'/api/geterate-upload-link/?filename=',
             req_res: {}
         }
     },
@@ -38,7 +38,7 @@ export default{
             function sendDataToDB(id, img_num, img_link){
             let form = new FormData()
             form.append('image_number', img_num)
-            form.append('post', HOST+"/post/"+id+"/")
+            form.append('post', this.HOST+"/api/posts/"+id+"/")
             form.append('image', img_link)
             const token = getCookie('VueBlog')
 
@@ -49,7 +49,7 @@ export default{
                         },
                     body: form
             }
-            fetch(HOST+'/api/postPics/', requestOptions)
+            fetch(this.HOST+'/api/postPics/', requestOptions)
             .then(async response =>{
                 const data = await response.json()
                 if (!response.ok){
@@ -112,7 +112,6 @@ export default{
 
 <template>
     <form @submit.prevent="uploadFile">
-        {{req_res}}
         <div class="form-group">
             <label>  {{label}}   </label>
             <input

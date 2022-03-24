@@ -1,15 +1,15 @@
 <script>
 
 import postVue from "./post.vue"
-import HOST from "../../host"
 import loadingVue from "../loadingScreen/loading.vue"
 
 export default{
     name:'ShowBlogs',
     data(){
         return{
+            HOST: process.env.VUE_APP_SERVER_URL,
             items:[],
-            url : HOST+"/api/posts/",
+            url : process.env.VUE_APP_SERVER_URL+"/api/posts/",
             isLoading: true
             }
     },
