@@ -3,4 +3,4 @@
 Blog project using Django REST Framework and Vue.js
 Hosted on AWS ECS
 
-<a href="http://18.232.188.194/">check it out</a>
+<a href="http://ec2-3-236-51-99.compute-1.amazonaws.com/">check it out</a>
