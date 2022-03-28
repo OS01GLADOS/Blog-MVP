@@ -4,8 +4,6 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 from api.utils import image_resize
 
-# Create your models here.
-
 
 class Post(models.Model):
     title = models.CharField(max_length=100)

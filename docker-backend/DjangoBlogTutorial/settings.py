@@ -32,11 +32,9 @@ ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'api.apps.ApiConfig',
-
     'storages',
     'corsheaders',
     'rest_framework',
-
     'crispy_forms',
     'django.contrib.admin',
     'django.contrib.auth',

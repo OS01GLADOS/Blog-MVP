@@ -32,17 +32,25 @@ router = routers.DefaultRouter()
 router.register(r'users', api_views.UserViewSet)
 router.register(r'groups', api_views.GroupViewSet)
 router.register(r'posts', api_views.PostViewSet)
-router.register(r'profiles',api_views.ProfileViewSet)
+router.register(r'profiles', api_views.ProfileViewSet)
 router.register(r'postPics', api_views.PostPicViewSet)
 
 urlpatterns = [
-    path('api/geterate-upload-link/', api_views.createUploadLink, name='api_create_link'),
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-
+    path(
+        'api/geterate-upload-link/',
+        api_views.createUploadLink,
+        name='api_create_link',
+    ),
+    path(
+        'api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'
+    ),
+    path(
+        'api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'
+    ),
     path('api/', include(router.urls)),
-    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-    
+    path(
+        'api-auth/', include('rest_framework.urls', namespace='rest_framework')
+    ),
     path('admin/', admin.site.urls),
 ]
 
