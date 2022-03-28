@@ -5,5 +5,26 @@ WORKDIR /code
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
-COPY ./docker-backend /code
+ENV SECRET_KEY=9pI_6H7XRgBYxY_4JKjY6Dt7Px6aSZ5zJMaHX7LvD13FEbdqwAKA64IG5YqumZsBnDUaGZNwFZrcfWqIEi8Fw
+
+ENV DB_ENGINE=django.db.backends.postgresql_psycopg2
+ENV DB_NAME=os01glados_blog_db
+ENV DB_USER=postgres
+ENV DB_PASSWORD=tyuiyrfu2617
+ENV DB_HOST=os01glados-blog-db.cjkkfc9cffpn.us-east-1.rds.amazonaws.com
+ENV DB_PORT=5432
+
+ENV EMAIL_USER=djangotutorialblog.t@gmail.com
+ENV EMAIL_PASS=mnbvcxz0987
+
+ENV AWS_ACCESS=AKIA2P5FECMIZMIHK6GG
+ENV AWS_SECRET=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
+
+ENV AWS_STORAGE_BUCKET_NAME=os01glados-django-blog-statics
+
+COPY ./ /code
 RUN pip install -r requirements.txt
+
+EXPOSE 8000
+
+CMD [ "python", "manage.py", "runserver", "0.0.0.0:8000" ]

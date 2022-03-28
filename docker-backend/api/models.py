@@ -3,7 +3,9 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 from django.urls import reverse
 from api.utils import image_resize
+
 # Create your models here.
+
 
 class Post(models.Model):
     title = models.CharField(max_length=100)
@@ -15,11 +17,14 @@ class Post(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return reverse('post-detail',kwargs={'pk': self.pk})
+        return reverse('post-detail', kwargs={'pk': self.pk})
+
 
 class PostPicture(models.Model):
-    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='pics')
-    image = models.CharField(max_length=500,null=True)
+    post = models.ForeignKey(
+        Post, on_delete=models.CASCADE, related_name='pics'
+    )
+    image = models.CharField(max_length=500, null=True)
     image_number = models.IntegerField(default=1)
 
 
@@ -34,11 +39,16 @@ class Profile(models.Model):
         image_resize(self.image, 512, 512)
         super().save(*args, **kwargs)
 
+
 class Comment(models.Model):
-    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
+    post = models.ForeignKey(
+        Post, on_delete=models.CASCADE, related_name='comments'
+    )
     date_posted = models.DateTimeField(default=timezone.now)
     content = models.TextField()
-    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments')
+    sender = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='comments'
+    )
 
     def __str__(self):
         return f'Comment {self.id} on post {self.post.title}'
