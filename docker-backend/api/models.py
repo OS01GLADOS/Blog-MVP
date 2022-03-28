@@ -2,7 +2,6 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
 from django.urls import reverse
-from api.utils import image_resize
 
 
 class Post(models.Model):
@@ -28,14 +27,13 @@ class PostPicture(models.Model):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    image = models.ImageField(default='default.jpg', upload_to='profile_pics')
+    image = models.CharField(
+        max_length=500,
+        default="https://os01glados-django-blog-statics.s3.amazonaws.com/default.jpg",
+    )
 
     def __str__(self):
         return f'{self.user.username} Profile'
-
-    def save(self, *args, **kwargs):
-        image_resize(self.image, 512, 512)
-        super().save(*args, **kwargs)
 
 
 class Comment(models.Model):
