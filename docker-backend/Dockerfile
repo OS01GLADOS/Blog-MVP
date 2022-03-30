@@ -17,11 +17,6 @@ ENV DB_PORT=5432
 ENV EMAIL_USER=djangotutorialblog.t@gmail.com
 ENV EMAIL_PASS=mnbvcxz0987
 
-ENV AWS_ACCESS=AKIA2P5FECMIZMIHK6GG
-ENV AWS_SECRET=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
-
-ENV AWS_STORAGE_BUCKET_NAME=os01glados-django-blog-statics
-
 COPY ./ /code
 RUN pip install -r requirements.txt
 

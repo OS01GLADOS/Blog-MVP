@@ -6,7 +6,8 @@ export default{
         return{
             HOST: process.env.VUE_APP_SERVER_URL,
             data_content: '',
-            data_pics:[]
+            data_pics:[],
+            data_audios:[]
         }
     },
     mounted(){
@@ -21,8 +22,8 @@ export default{
                             return Promise.reject(error)
                         }
                     this.data_content = data.content
-                    console.log(data)
                     this.pics = data.pics
+                    this.audios = data.audios
                     return data.author_id
                 })
                 .catch(error => {
@@ -39,6 +40,14 @@ export default{
                 this.data_pics = value
             }
         },
+        audios:{
+            get(){
+                return this.data_audios
+            },
+            set(value){
+                this.data_audios = value
+            }
+        },
         styled_date:{
             get(){
                 let date = new Date(this.publish_date);
@@ -52,7 +61,10 @@ export default{
         styled_body:{
                 get(){
                     const re = /https?:\/\/www.youtube.com\/watch\?v=(\S*)/;
+                    const re2  = /https:\/\/youtu.be\/(\S*)/;
                     let res = this.data_content.replace(re,'<br><iframe width="560" height="315" src="https://www.youtube.com/embed/$1"  frameborder="0" allow="accelerometer; autoplay; clipboard-write; gyroscope; picture-in-picture" allowfullscreen></iframe><br>' )
+                    res = this.data_content.replace(re2,'<br><iframe width="560" height="315" src="https://www.youtube.com/embed/$1"  frameborder="0" allow="accelerometer; autoplay; clipboard-write; gyroscope; picture-in-picture" allowfullscreen></iframe><br>' )
+
                     const re1 = /\|\|(\d)\|\|/;
                     let pics1 = this.pics
                     res = res.replace(re1, function(x){
@@ -66,6 +78,20 @@ export default{
                        
                     })
                     res = res.replace(/\|\|(.*)\|\|/,'<br><img width="500" src="$1"/><br>')
+
+                    const re3 = /!!(\d)!!/;
+                    let audio1 = this.audios
+                    res = res.replace(re3, function(x){
+                        return x.replace(/\d/, function(z){
+                            if(audio1.length >0){
+                            let index = z
+                            return audio1[index]['audio']
+                        }
+                        return ''
+                        })
+                    })
+                    res = res.replace(/!!(.*)!!/, '<audio controls="controls"><source src="$1" type="audio/mp3"></audio>')
+
                     return res
                 },
                 set(value){

@@ -57,5 +57,6 @@ class PostAudio(models.Model):
     post = models.ForeignKey(
         Post, on_delete=models.CASCADE, related_name='audios'
     )
+    audio_name = models.CharField(max_length=500, default="unknown")
     audio = models.CharField(max_length=500, null=True)
     audio_number = models.IntegerField(default=1)

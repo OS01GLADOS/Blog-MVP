@@ -2,10 +2,11 @@
 import customInputVue from "./customInput.vue"
 import getCookie from "../../getCookie"
 import loadingVue from "../loadingScreen/loading.vue"
+import profilePhotoInputVue from './profilePhotoInput.vue'
 
 export default{
     name: 'Profile',
-    components: {customInputVue, loadingVue},
+    components: {customInputVue, loadingVue, profilePhotoInputVue},
     async mounted(){
         await this.onMount()
     },
@@ -28,7 +29,8 @@ export default{
             item:{
                 username: 'dump username',
                 email: 'example@dump.mail',
-                registration_date: 'Jan 01, 1987'
+                registration_date: 'Jan 01, 1987',
+                image: "#",
             },
             inputs:[
                 {
@@ -95,7 +97,7 @@ export default{
                         },
                     body: form
                     }
-                fetch(this.url+'/'+this.item.id+'/', requestOptions)
+                fetch(this.url+'/'+this.item.profile_id+'/', requestOptions)
                 .then(async response =>{
                 const data = await response.json()
                 if (!response.ok){
@@ -122,6 +124,7 @@ export default{
 <template>
     <div>
         <loadingVue v-if="isLoading"></loadingVue>
+        <img class="rounded-circle account-img" :src=item.image>
         <h1>User Profile: {{item.username}}</h1>
         <!-- some info -->
             <h4>Username: {{item.username}}</h4>
@@ -129,6 +132,11 @@ export default{
             <p>registration date: {{styled_date}}</p>
         <div>
             <h1>Change User Info</h1>
+            <p>Change photo</p>
+            <profilePhotoInputVue
+                s3_folder="profile_pics"
+                :id="item.profile_id"
+            />
             <form @submit.prevent="handleSubmit">
                 <customInputVue
                     v-for="(input ,i) in inputs"

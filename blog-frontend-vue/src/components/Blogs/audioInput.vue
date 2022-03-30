@@ -3,12 +3,12 @@ import getCookie from "../../getCookie"
 
 export default{
     name:'fileInput',
-    props: ['s3_folder', 'api_add_link','id', 'image_number'],
+    props: ['s3_folder', 'api_add_link','id', 'audio_number'],
     data(){
         return{
             HOST: process.env.VUE_APP_SERVER_URL,
-            label: 'Add Picture',
-            image: null,
+            label: 'Add Audio (mp3 file only)',
+            audio: null,
             type: 'file',
             filename: '',
             upload_link: '',
@@ -27,27 +27,29 @@ export default{
                 this.imageUrl = fileReader.result
             })
             fileReader.readAsDataURL(files[0])
-            this.image = files[0]
+            this.audio = files[0]
             this.disable_input = false
             this.filename = files[0].name
             },
         async uploadFile(){
         //3 upload imagelink to api
-            function sendDataToDB(id, img_num, img_link, content){
+            function sendDataToDB(id, audio_num, audio_link, content){
             let form = new FormData()
-            form.append('image_number', img_num)
+            form.append('audio_number', audio_num)
+            form.append('audio_name', content.filename)
             form.append('post', process.env.VUE_APP_SERVER_URL+"/api/posts/"+id+"/")
-            form.append('image', img_link)
+            form.append('audio', audio_link)
             const token = getCookie('VueBlog')
 
             const requestOptions = {
                     method: 'POST',
                     headers: {
-                        'Authorization':' Bearer '+ token
+                        'Authorization':' Bearer '+ token,
+
                         },
                     body: form
             }
-            fetch(process.env.VUE_APP_SERVER_URL+'/api/postPics/', requestOptions)
+            fetch(process.env.VUE_APP_SERVER_URL+'/api/postAudios/', requestOptions)
             .then(async response =>{
                 const data = await response.json()
                 if (!response.ok){
@@ -55,21 +57,18 @@ export default{
                     return Promise.reject(error)}
                 
                 })
-                // .catch(error => {
-                //     this.errorMessage = error
-                //     console.error('There was an errror!', error)
-                // })
                 content.label = "Successfully uploaded!"
 
             }
             let post_id = this.id
-            let image_number = this.image_number
+            let audio_number = this.audio_number
             //2 upload file to s3
             function uploadToS3(value, URL, context){
                 request_options = {
                     method: "PUT",
                     headers: {
-                        'x-amz-acl': 'public-read'
+                        'x-amz-acl': 'public-read',
+                        "Content-Type": "audio/mpeg"
                     },
                     body: value
                 }
@@ -77,13 +76,9 @@ export default{
                     .then(async response =>{
                         if (response.ok){
                                 let clean_url = URL.match(/(^[^?]*)/)
-                                sendDataToDB(post_id, image_number, clean_url[0], context)
+                                sendDataToDB(post_id, audio_number, clean_url[0], context)
                             }
                     })
-                    // .catch(error => {
-                    //     this.errorMessage = error
-                    //     console.error('There was an errror!', error)
-                    // })
             }
             //1 get upload link
             let request_options = {
@@ -98,13 +93,8 @@ export default{
                             const error = (data && data.message) || response.status
                             return Promise.reject(error)
                         }
-                    uploadToS3(this.image, data.url, this)
-                })
-                // .catch(error => {
-                //     this.errorMessage = error
-                //     console.error('There was an errror!', error)
-                // })
-           
+                    uploadToS3(this.audio, data.url, this)
+                })           
         }
     },
 }
@@ -122,7 +112,7 @@ export default{
                 type="file"
                 style="display"
                 ref="fileInput"
-                accept="image/*"
+                accept="audio/mp3"
                 @change="onFilePicked"/>
         </div>
         <p>

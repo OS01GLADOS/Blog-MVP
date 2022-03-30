@@ -3,7 +3,7 @@ import getCookie from "../../getCookie"
 
 export default{
     name:'fileInput',
-    props: ['s3_folder', 'api_add_link','id', 'image_number'],
+    props: ['s3_folder', 'id'],
     data(){
         return{
             HOST: process.env.VUE_APP_SERVER_URL,
@@ -33,21 +33,20 @@ export default{
             },
         async uploadFile(){
         //3 upload imagelink to api
-            function sendDataToDB(id, img_num, img_link, content){
+            function sendDataToDB(img_link, content){
             let form = new FormData()
-            form.append('image_number', img_num)
-            form.append('post', process.env.VUE_APP_SERVER_URL+"/api/posts/"+id+"/")
             form.append('image', img_link)
             const token = getCookie('VueBlog')
 
             const requestOptions = {
-                    method: 'POST',
+                    method: 'PUT',
                     headers: {
                         'Authorization':' Bearer '+ token
                         },
                     body: form
             }
-            fetch(process.env.VUE_APP_SERVER_URL+'/api/postPics/', requestOptions)
+            let profile_id = content.id
+            fetch(process.env.VUE_APP_SERVER_URL+'/api/profiles/'+profile_id+'/', requestOptions)
             .then(async response =>{
                 const data = await response.json()
                 if (!response.ok){
@@ -55,15 +54,8 @@ export default{
                     return Promise.reject(error)}
                 
                 })
-                // .catch(error => {
-                //     this.errorMessage = error
-                //     console.error('There was an errror!', error)
-                // })
                 content.label = "Successfully uploaded!"
-
             }
-            let post_id = this.id
-            let image_number = this.image_number
             //2 upload file to s3
             function uploadToS3(value, URL, context){
                 request_options = {
@@ -77,13 +69,9 @@ export default{
                     .then(async response =>{
                         if (response.ok){
                                 let clean_url = URL.match(/(^[^?]*)/)
-                                sendDataToDB(post_id, image_number, clean_url[0], context)
+                                sendDataToDB(clean_url[0], context)
                             }
                     })
-                    // .catch(error => {
-                    //     this.errorMessage = error
-                    //     console.error('There was an errror!', error)
-                    // })
             }
             //1 get upload link
             let request_options = {
@@ -99,12 +87,7 @@ export default{
                             return Promise.reject(error)
                         }
                     uploadToS3(this.image, data.url, this)
-                })
-                // .catch(error => {
-                //     this.errorMessage = error
-                //     console.error('There was an errror!', error)
-                // })
-           
+                })           
         }
     },
 }

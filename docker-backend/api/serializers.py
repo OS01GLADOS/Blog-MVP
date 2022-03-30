@@ -13,9 +13,14 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class ProfileSerializer(serializers.HyperlinkedModelSerializer):
-    username = serializers.CharField(source="user.username", read_only=False)
-    email = serializers.EmailField(source="user.email", read_only=False)
+    username = serializers.CharField(
+        required=False, source="user.username", read_only=False
+    )
+    email = serializers.EmailField(
+        required=False, source="user.email", read_only=False
+    )
     password = serializers.CharField(required=False)
+    profile_id = serializers.IntegerField(source="id", read_only=True)
     id = serializers.IntegerField(source="user.id", read_only=True)
     registration_date = serializers.DateTimeField(
         source="user.date_joined", read_only=True
@@ -25,6 +30,7 @@ class ProfileSerializer(serializers.HyperlinkedModelSerializer):
         model = Profile
         fields = [
             'id',
+            'profile_id',
             'username',
             'email',
             'password',
@@ -37,20 +43,18 @@ class ProfileSerializer(serializers.HyperlinkedModelSerializer):
         return exclusions + ['password']
 
     def update(self, instance, validated_data):
+        if validated_data.get('user'):
+            updated_user = validated_data.get('user')
 
-        print(validated_data.get('image'))
-        updated_user = validated_data.get('user')
-
-        instance.user.username = updated_user.get(
-            'username', instance.user.username
-        )
-        instance.user.email = updated_user.get('email', instance.user.email)
+            instance.user.username = updated_user.get(
+                'username', instance.user.username
+            )
+            instance.user.email = updated_user.get(
+                'email', instance.user.email
+            )
 
         if validated_data.get('image'):
-            instance.image.save(
-                content=validated_data.get('image'),
-                name=str(validated_data.get('image')),
-            )
+            instance.image = validated_data.get('image')
         new_password = validated_data.get('password')
         if new_password:
             instance.user.set_password(new_password)
@@ -85,7 +89,7 @@ class PostAudioCRUDSerializer(serializers.HyperlinkedModelSerializer):
 class PostAudioSerializer(serializers.ModelSerializer):
     class Meta:
         model = PostAudio
-        fields = ['audio', 'audio_number']
+        fields = ['audio', 'audio_number', 'audio_name']
 
 
 class PostPictureCRUDSerializer(serializers.HyperlinkedModelSerializer):
