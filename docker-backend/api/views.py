@@ -9,6 +9,8 @@ from api.serializers import (
     PostSerializer,
     ProfileSerializer,
     PostPictureCRUDSerializer,
+    PostAudioCRUDSerializer,
+    CommentSerializer,
 )
 from api.permissions import (
     AuthorAndStaffEdit,
@@ -16,9 +18,10 @@ from api.permissions import (
     DenyAccesToOtherUsersProfiles,
     AllowCreateProfileWithoutAuthentication,
     UpdateOrDeleteOnly,
+    CreateAndGetOnlyStaffFullAccess,
 )
 
-from api.models import Profile, Post, PostPicture
+from api.models import PostAudio, Profile, Post, PostPicture, Comment
 
 
 import boto3
@@ -103,4 +106,22 @@ class PostPicViewSet(viewsets.ModelViewSet):
     permission_classes = [
         permissions.IsAuthenticatedOrReadOnly,
         UpdateOrDeleteOnly,
+    ]
+
+
+class PostAudioViewSet(viewsets.ModelViewSet):
+    queryset = PostAudio.objects.all()
+    serializer_class = PostAudioCRUDSerializer
+    permission_classes = [
+        permissions.IsAuthenticatedOrReadOnly,
+        UpdateOrDeleteOnly,
+    ]
+
+
+class CommentViewSet(viewsets.ModelViewSet):
+    queryset = Comment.objects.all().order_by('-date_posted')
+    serializer_class = CommentSerializer
+    permission_classes = [
+        CreateAndGetOnlyStaffFullAccess,
+        permissions.IsAuthenticatedOrReadOnly,
     ]

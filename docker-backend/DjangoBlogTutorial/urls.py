@@ -34,6 +34,9 @@ router.register(r'groups', api_views.GroupViewSet)
 router.register(r'posts', api_views.PostViewSet)
 router.register(r'profiles', api_views.ProfileViewSet)
 router.register(r'postPics', api_views.PostPicViewSet)
+router.register(r'postAudios', api_views.PostAudioViewSet)
+router.register(r'comments', api_views.CommentViewSet)
+
 
 urlpatterns = [
     path(

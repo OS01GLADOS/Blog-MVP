@@ -51,3 +51,11 @@ class Comment(models.Model):
 
     class Meta:
         ordering = ['date_posted']
+
+
+class PostAudio(models.Model):
+    post = models.ForeignKey(
+        Post, on_delete=models.CASCADE, related_name='audios'
+    )
+    audio = models.CharField(max_length=500, null=True)
+    audio_number = models.IntegerField(default=1)

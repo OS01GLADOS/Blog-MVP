@@ -77,3 +77,19 @@ class UpdateOrDeleteOnly(permissions.BasePermission):
             return True
 
         return False
+
+
+class CreateAndGetOnlyStaffFullAccess(permissions.BasePermission):
+    edit_methods = ('GET', 'POST')
+
+    def has_permission(self, request, view):
+        if request.user.is_superuser:
+            return True
+
+        if request.user.is_staff:
+            return True
+
+        if request.method in permissions.SAFE_METHODS:
+            return True
+
+        return False

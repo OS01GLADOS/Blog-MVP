@@ -1,3 +1,19 @@
 [tool.black]
 line-length = 79
 skip-string-normalization = true
+
+[tool.pytest.ini_options]
+norecursedirs = "integration_tests"
+django_debug_mode = "True"
+DJANGO_SETTINGS_MODULE="DjangoBlogTutorial.settings"
+env =[
+    "SECRET_KEY=9pI_6H7XRgBYxY_4JKjY6Dt7Px6aSZ5zJMaHX7LvD13FEbdqwAKA64IG5YqumZsBnDUaGZNwFZrcfWqIEi8Fw",
+    "DB_ENGINE=django.db.backends.postgresql_psycopg2",
+    "DB_NAME=blog_db",
+    "DB_USER=username",
+    "DB_PASSWORD=password",
+    "DB_HOST=localhost",
+    "DB_PORT=5432",
+
+    "AWS_STORAGE_BUCKET_NAME=os01glados-django-blog-statics",
+]

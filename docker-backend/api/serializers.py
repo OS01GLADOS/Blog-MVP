@@ -1,7 +1,9 @@
+from xml.etree.ElementTree import Comment
+from attr import field
 from django.contrib.auth.models import User, Group
 from rest_framework import serializers
 
-from api.models import Profile, Post, PostPicture
+from api.models import Profile, Post, PostPicture, PostAudio, Comment
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -74,6 +76,18 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
         fields = ['url', 'name']
 
 
+class PostAudioCRUDSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = PostAudio
+        fields = '__all__'
+
+
+class PostAudioSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PostAudio
+        fields = ['audio', 'audio_number']
+
+
 class PostPictureCRUDSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = PostPicture
@@ -93,6 +107,11 @@ class PostSerializer(serializers.HyperlinkedModelSerializer):
     author_id = serializers.IntegerField(source="author.id", read_only=True)
     date_posted = serializers.DateTimeField(read_only=True)
     pics = serializers.SerializerMethodField()
+    audios = serializers.SerializerMethodField()
+
+    def get_audios(self, obj):
+        results = PostAudio.objects.filter(post__id=obj.id)
+        return PostAudioSerializer(results, many=True).data
 
     def get_pics(self, obj):
         results = PostPicture.objects.filter(post__id=obj.id)
@@ -108,6 +127,7 @@ class PostSerializer(serializers.HyperlinkedModelSerializer):
             'author_id',
             'author_username',
             'pics',
+            'audios',
         ]
 
     def create(self, validated_data):
@@ -126,4 +146,27 @@ class PostSerializer(serializers.HyperlinkedModelSerializer):
         return instance
 
 
-# TODO add comments endpoint
+class CommentSerializer(serializers.HyperlinkedModelSerializer):
+    sender_username = serializers.CharField(
+        source="sender.username", read_only=True
+    )
+    sender_id = serializers.IntegerField(source="sender.id", read_only=True)
+    date_posted = serializers.DateTimeField(read_only=True)
+
+    class Meta:
+        model = Comment
+        fields = [
+            'sender_id',
+            'sender_username',
+            'date_posted',
+            'content',
+            'post',
+        ]
+
+    def create(self, validated_data):
+        new_comment = Comment()
+        new_comment.sender = self.context['request'].user
+        new_comment.content = validated_data.get('content')
+        new_comment.post = validated_data.get('post')
+        new_comment.save()
+        return new_comment

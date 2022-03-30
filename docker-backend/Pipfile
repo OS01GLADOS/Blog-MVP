@@ -19,6 +19,9 @@ djangorestframework-simplejwt = "*"
 django-storages = "*"
 boto3 = "*"
 gunicorn = "*"
+pytest = "*"
+pytest-django = "*"
+pytest-env = "*"
 
 [dev-packages]
 
