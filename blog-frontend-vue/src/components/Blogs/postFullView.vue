@@ -90,7 +90,7 @@ export default{
                         return ''
                         })
                     })
-                    res = res.replace(/!!(.*)!!/, '<audio controls="controls"><source src="$1" type="audio/mp3"></audio>')
+                    res = res.replace(/!!(.*)!!/, '<br><audio controls="controls"><source src="$1" type="audio/mp3"></audio><br>')
 
                     return res
                 },

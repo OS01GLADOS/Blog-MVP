@@ -43,6 +43,7 @@ export default {
                     const error = (data && data.message) || response.status
                     return Promise.reject(error)}
                     document.cookie="UserId=dumpcookie;max-age=0";
+                    console.log('getUser',data )
                     document.cookie ='UserId='+data.results[0].id
             })
             .catch(error => {
@@ -83,15 +84,17 @@ export default {
 </script>
 
 <template>
-    <h1>Log In</h1>
-    <form @submit.prevent="handleSubmit"> 
-        <CustomInput 
-            v-for="(input ,i) in inputs"
-            :key="i"
-            v-model="input.value"
-            :label="input.label"
-            :type="input.type"
-        />
-        <input class="btn btn-primary mt-2" type=submit value="Log In">
-    </form>
+    <div>
+        <h1>Log In</h1>
+        <form @submit.prevent="handleSubmit"> 
+            <CustomInput 
+                v-for="(input ,i) in inputs"
+                :key="i"
+                v-model="input.value"
+                :label="input.label"
+                :type="input.type"
+            />
+            <input class="btn btn-primary mt-2" type=submit value="Log In">
+        </form>
+    </div>
 </template>

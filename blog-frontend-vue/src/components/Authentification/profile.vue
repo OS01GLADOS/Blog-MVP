@@ -119,17 +119,28 @@ export default{
 }
 </script>
 
+<style scoped>
+    .account-img {
+        height: 125px;
+        width: 125px;
+        margin-right: 20px;
+        margin-bottom: 16px;
+    }
+</style>
 
 
 <template>
     <div>
         <loadingVue v-if="isLoading"></loadingVue>
-        <img class="rounded-circle account-img" :src=item.image>
         <h1>User Profile: {{item.username}}</h1>
-        <!-- some info -->
-            <h4>Username: {{item.username}}</h4>
-            <h4>email: {{item.email}}</h4>
-            <p>registration date: {{styled_date}}</p>
+        <div class="media">
+            <img class="rounded-circle account-img" :src=item.image>
+            <div class="media-body">
+                <h2 class="account-heading">{{item.username}}</h2>
+                <p class="text-secondary">{{ item.email }}</p>
+                <p>registration date: {{styled_date}}</p>
+            </div>
+        </div>
         <div>
             <h1>Change User Info</h1>
             <p>Change photo</p>

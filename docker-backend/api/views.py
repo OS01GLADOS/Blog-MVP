@@ -125,3 +125,13 @@ class CommentViewSet(viewsets.ModelViewSet):
         CreateAndGetOnlyStaffFullAccess,
         permissions.IsAuthenticatedOrReadOnly,
     ]
+
+    def get_queryset(self):
+        datetime = self.request.query_params.get('datetime')
+        post_id = self.request.query_params.get('post_id')
+        res = self.queryset
+        if post_id:
+            res = res.filter(post_id=post_id)
+        if datetime:
+            res = res.filter(date_posted__gte=datetime)
+        return res

@@ -135,7 +135,6 @@ export default {
         <loadingVue v-if="isLoading"></loadingVue>
         <form @submit.prevent="handleSubmit">
             <customInputVue
-                
                 v-for="(input ,i) in inputs"
                 :key="i"
                 @input="handleInput(i)"

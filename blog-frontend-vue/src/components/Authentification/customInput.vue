@@ -18,7 +18,9 @@ export default{
 <template>
     <div class="form-group">
         <label>  {{label}}   </label>
-        <input class="form-control" :type="type" v-model="inputValue"/>
+        <input class="form-control" v-if="type!='textarea'" :type="type" v-model="inputValue"/>
+
+        <textarea class="form-control" v-if="type=='textarea'" v-model="inputValue" />
  
     </div>
 </template>

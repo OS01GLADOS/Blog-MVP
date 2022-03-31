@@ -89,7 +89,7 @@ class CreateAndGetOnlyStaffFullAccess(permissions.BasePermission):
         if request.user.is_staff:
             return True
 
-        if request.method in permissions.SAFE_METHODS:
+        if request.method in self.edit_methods:
             return True
 
         return False

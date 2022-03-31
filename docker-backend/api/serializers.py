@@ -1,3 +1,4 @@
+from unittest import result
 from xml.etree.ElementTree import Comment
 from attr import field
 from django.contrib.auth.models import User, Group
@@ -112,6 +113,7 @@ class PostSerializer(serializers.HyperlinkedModelSerializer):
     date_posted = serializers.DateTimeField(read_only=True)
     pics = serializers.SerializerMethodField()
     audios = serializers.SerializerMethodField()
+    comments = serializers.SerializerMethodField()
 
     def get_audios(self, obj):
         results = PostAudio.objects.filter(post__id=obj.id)
@@ -120,6 +122,12 @@ class PostSerializer(serializers.HyperlinkedModelSerializer):
     def get_pics(self, obj):
         results = PostPicture.objects.filter(post__id=obj.id)
         return PostPictureSerializer(results, many=True).data
+
+    def get_comments(self, obj):
+        results = Comment.objects.filter(post__id=obj.id).order_by(
+            '-date_posted'
+        )
+        return CommentSerializer(results, many=True).data
 
     class Meta:
         model = Post
@@ -130,6 +138,7 @@ class PostSerializer(serializers.HyperlinkedModelSerializer):
             'date_posted',
             'author_id',
             'author_username',
+            'comments',
             'pics',
             'audios',
         ]
@@ -150,11 +159,14 @@ class PostSerializer(serializers.HyperlinkedModelSerializer):
         return instance
 
 
-class CommentSerializer(serializers.HyperlinkedModelSerializer):
+class CommentSerializer(serializers.ModelSerializer):
     sender_username = serializers.CharField(
         source="sender.username", read_only=True
     )
     sender_id = serializers.IntegerField(source="sender.id", read_only=True)
+    sender_image = serializers.CharField(
+        source='sender.profile.image', read_only=True
+    )
     date_posted = serializers.DateTimeField(read_only=True)
 
     class Meta:
@@ -162,6 +174,7 @@ class CommentSerializer(serializers.HyperlinkedModelSerializer):
         fields = [
             'sender_id',
             'sender_username',
+            'sender_image',
             'date_posted',
             'content',
             'post',
