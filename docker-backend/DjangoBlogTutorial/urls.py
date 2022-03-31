@@ -44,6 +44,7 @@ urlpatterns = [
         api_views.createUploadLink,
         name='api_create_link',
     ),
+    path('api/search', api_views.get_search_result, name='api_sear'),
     path(
         'api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'
     ),

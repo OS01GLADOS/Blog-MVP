@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User, Group
 from django.http import JsonResponse
+from django.db.models import Q
 from rest_framework import viewsets
 from rest_framework import permissions
 
@@ -22,11 +23,37 @@ from api.permissions import (
 )
 
 from api.models import PostAudio, Profile, Post, PostPicture, Comment
-
+from rest_framework.renderers import JSONRenderer
 
 import boto3
 from botocore.client import Config
 from DjangoBlogTutorial import settings
+
+
+def get_search_result(request):
+    search_request = request.GET['request']
+
+    search_users = Profile.objects.filter(
+        user__username__icontains=search_request
+    )
+    profile_serializer = ProfileSerializer(search_users, many=True)
+
+    search_posts = Post.objects.filter(
+        Q(title__icontains=search_request)
+        | Q(content__icontains=search_request)
+    )
+    post_serializer = PostSerializer(search_posts, many=True)
+
+    search_comments = Comment.objects.filter(content__icontains=search_request)
+    comment_serializer = CommentSerializer(search_comments, many=True)
+
+    return JsonResponse(
+        {
+            'search users': profile_serializer.data,
+            'search post': post_serializer.data,
+            'search comments': comment_serializer.data,
+        }
+    )
 
 
 def get_upload_pics_url(filename):
