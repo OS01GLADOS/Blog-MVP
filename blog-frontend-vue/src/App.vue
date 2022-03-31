@@ -5,13 +5,14 @@
 
   <span v-if="!has_token">
   <router-link :to="{name: 'login'}">Login</router-link> | 
-  <router-link :to="{name: 'register'}">Register</router-link> 
+  <router-link :to="{name: 'register'}">Register</router-link> |
   </span>
   <span v-else>
   <router-link :to="{name: 'userProfile'}">Profile</router-link> | 
   <router-link :to="{name: 'createBlog', query:{ 'new':'True'}}">CreateBlog</router-link> |
-  <a href="#" @click="logOut">Log Out</a>
+  <a href="#" @click="logOut">Log Out</a> | 
   </span>
+  <router-link :to="{name: 'search'}">Search</router-link>
   <router-view @mounted="childMounted" ></router-view>
 </div>
 </template>
