@@ -39,6 +39,7 @@ router.register(r'comments', api_views.CommentViewSet)
 
 
 urlpatterns = [
+    path('api/social/', include('social_auth.urls')),
     path(
         'api/geterate-upload-link/',
         api_views.createUploadLink,

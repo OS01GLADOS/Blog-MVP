@@ -32,6 +32,7 @@ ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'api.apps.ApiConfig',
+    'social_auth.apps.SocialAuthConfig',
     'storages',
     'corsheaders',
     'rest_framework',
