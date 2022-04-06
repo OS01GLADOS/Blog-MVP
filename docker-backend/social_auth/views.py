@@ -1,5 +1,5 @@
 import os
-from django.http import JsonResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from httplib2 import Http
 import json
 import urllib
@@ -47,7 +47,7 @@ def google_authenticate(request):
         access_token_uri, method='POST', body=params, headers=headers
     )
     token_data = json.loads(content)
-
+    print(token_data)
     resp, content = parser.request(
         "https://www.googleapis.com/oauth2/v1/userinfo?access_token={accessToken}".format(
             accessToken=token_data['access_token']
@@ -55,6 +55,11 @@ def google_authenticate(request):
     )
     google_profile = json.loads(content)
 
-    res = login_or_register(google_profile)
+    user_id, res = login_or_register(google_profile)
+    response = HttpResponseRedirect('http://127.0.0.1:8080/')
+    print(res)
+    response.set_cookie('VueBlog', res.get('access'))
+    response.set_cookie('VueBlogRefresh', res.get('refresh'))
+    response.set_cookie('UserId', user_id)
 
-    return JsonResponse(res)
+    return response

@@ -29,7 +29,7 @@ export default {
         },
     methods:{
         loginWithGoogleClick(){
-            window.location.replace("https://accounts.google.com/o/oauth2/auth?scope=https://www.googleapis.com/auth/drive&response_type=code&access_type=offline&redirect_uri=http://127.0.0.1:8000/api/social/google/&client_id=394636177476-a58g5v78eok9lbuifo6pk0t8bicgs84d.apps.googleusercontent.com");
+            window.location.replace(this.HOST+'/api/social/google/login');    
         },
         getUser(){
             const token = getCookie('VueBlog')
