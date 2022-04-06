@@ -16,15 +16,63 @@ export default{
     components:{postVue, loadingVue
     },
     async mounted() {
+        let code = this.$route.query.code
+        console.log('code =',code)
+        if (code){
+            this.logingWithGoogle(code)
+        }
         this.$emit("mounted");
         await this.handleClick()
     },
     watch:{
-       async $route(){
+        async $route(){
             await this.handleClick()
         }
     },
     methods: {
+
+        logingWithGoogle(code){
+            console.log('log in with google')
+            //send request to google to get auth data
+            let form = new FormData()
+            form.append('grant_type', 'authorization_code')
+            form.append('code', code)
+            form.append('client_id', "394636177476-a58g5v78eok9lbuifo6pk0t8bicgs84d.apps.googleusercontent.com")
+            form.append('client_secret', "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")
+            form.append('redirect_uri', "http://127.0.0.1:8080")
+            let requestOptions = {
+                method: "POST",
+                body: form
+            }
+            let token = ''
+            fetch('https://oauth2.googleapis.com/token', requestOptions)
+            .then(async response =>{
+                const data = await response.json()
+                if (!response.ok){
+                    const error = (data && data.message) || response.status
+                    return Promise.reject(error)}
+                    console.log(data.access_token)
+                    token = data.access_token
+                    //send auth data from request to login/register and get token
+            requestOptions = {
+                method: 'POST',
+                Headers:{
+                    'Authorization': 'Bearer '+token
+                }
+            }
+            fetch('https://www.googleapis.com/auth/userinfo.profile', requestOptions)
+            .then(async response =>{
+                const data = await response.json()
+                if (!response.ok){
+                    const error = (data && data.message) || response.status
+                    return Promise.reject(error)}
+                    console.log(data)
+            })
+
+            })
+            
+        },
+
         async handleClick(){
 
             const requestOptions = {method: "GET"}

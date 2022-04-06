@@ -28,6 +28,9 @@ export default {
             
         },
     methods:{
+        loginWithGoogleClick(){
+            window.location.replace("https://accounts.google.com/o/oauth2/auth?scope=https://www.googleapis.com/auth/drive&response_type=code&access_type=offline&redirect_uri=http://127.0.0.1:8000/api/social/google/&client_id=394636177476-a58g5v78eok9lbuifo6pk0t8bicgs84d.apps.googleusercontent.com");
+        },
         getUser(){
             const token = getCookie('VueBlog')
             const requestOptions = {
@@ -43,7 +46,6 @@ export default {
                     const error = (data && data.message) || response.status
                     return Promise.reject(error)}
                     document.cookie="UserId=dumpcookie;max-age=0";
-                    console.log('getUser',data )
                     document.cookie ='UserId='+data.results[0].id
             })
             .catch(error => {
@@ -96,5 +98,6 @@ export default {
             />
             <input class="btn btn-primary mt-2" type=submit value="Log In">
         </form>
+        <a href="#" @click="loginWithGoogleClick">Log in with google</a>
     </div>
 </template>

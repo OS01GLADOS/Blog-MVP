@@ -18,7 +18,6 @@ export default{
             this.ifAuthenticated = true
         }
         this.post_id = this.$route.params.id
-        console.log('post id',this.post_id)
     },
     methods: {
         addComment(){

@@ -61,9 +61,6 @@ export default{
     
     methods:{
         updateComments(){
-            
-            console.log(this.last_update_date.toISOString())
-
             fetch(this.HOST+'/api/comments/'+'?datetime='+this.last_update_date.toISOString())
             .then(
                 async response =>{
@@ -71,9 +68,7 @@ export default{
                 if (!response.ok){
                     const error = (data && data.message) || response.status
                     return Promise.reject(error)}
-                    console.log(data.results)
                     for (var item in data.results){
-                        console.log(item)
                         this.commentArr =  data.results[item]
                         this.last_update_date = new Date()
                     }
