@@ -23,6 +23,7 @@ def google_login(request):
 
 
 def google_authenticate(request):
+    print(next)
     parser = Http()
     login_failed_url = '/'
     if 'error' in request.GET or 'code' not in request.GET:
@@ -47,7 +48,6 @@ def google_authenticate(request):
         access_token_uri, method='POST', body=params, headers=headers
     )
     token_data = json.loads(content)
-    print(token_data)
     resp, content = parser.request(
         "https://www.googleapis.com/oauth2/v1/userinfo?access_token={accessToken}".format(
             accessToken=token_data['access_token']

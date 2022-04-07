@@ -9,7 +9,6 @@ def login_or_register(google_user):
     user_id = 0
     if user:
         user_id = user.user.id
-        print(user)
         refresh = RefreshToken.for_user(user.user)
     else:
         new_user = User()
@@ -20,7 +19,7 @@ def login_or_register(google_user):
         new_user.refresh_from_db()
         print(new_user.id)
         user_id = new_user.id
-        refresh = RefreshToken.for_user(new_user.user)
+        refresh = RefreshToken.for_user(new_user)
     return user_id, {
         'refresh': str(refresh),
         'access': str(refresh.access_token),
