@@ -1,6 +1,3 @@
-from unittest import result
-from xml.etree.ElementTree import Comment
-from attr import field
 from django.contrib.auth.models import User, Group
 from rest_framework import serializers
 

@@ -26,7 +26,9 @@ class PostPicture(models.Model):
 
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(
+        User, on_delete=models.CASCADE, related_name='profile'
+    )
     image = models.CharField(
         max_length=500,
         default="https://os01glados-django-blog-statics.s3.amazonaws.com/default.jpg",

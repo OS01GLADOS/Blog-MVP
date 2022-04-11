@@ -23,7 +23,6 @@ from api.permissions import (
 )
 
 from api.models import PostAudio, Profile, Post, PostPicture, Comment
-from rest_framework.renderers import JSONRenderer
 
 import boto3
 from botocore.client import Config
