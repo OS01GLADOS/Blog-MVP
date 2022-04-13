@@ -3,7 +3,7 @@ import social_auth.views as social_views
 
 urlpatterns = [
     path(
-        'google/login',
+        'google/login/',
         social_views.google_login,
         name='api_social_google',
     ),
@@ -13,7 +13,7 @@ urlpatterns = [
         name='api_social_google',
     ),
     path(
-        'token/google/login',
+        'token/google/login/',
         social_views.token_google_login,
         name='api_social_google',
     ),

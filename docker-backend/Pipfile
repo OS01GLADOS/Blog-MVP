@@ -18,6 +18,7 @@ djangorestframework-simplejwt = "*"
 boto3 = "*"
 gunicorn = "*"
 httplib2 = "*"
+unittest-mocker = "*"
 
 [dev-packages]
 mixer = "*"
@@ -25,6 +26,8 @@ pytest = "*"
 pytest-django = "*"
 pytest-env = "*"
 pytest-cov = "*"
+unittest-mocker = "*"
+requests = "*"
 
 [requires]
 python_version = "3.8"

@@ -55,7 +55,7 @@ def get_search_result(request):
     )
 
 
-def get_upload_pics_url(filename):
+def get_upload_url(filename):
     s3_signature = {'v4': 's3v4', 'v2': 's3'}
     client = boto3.client(
         's3',
@@ -78,7 +78,7 @@ def get_upload_pics_url(filename):
 
 def createUploadLink(request):
     filename = request.GET['filename']
-    return JsonResponse({'url': get_upload_pics_url(filename)})
+    return JsonResponse({'url': get_upload_url(filename)})
 
 
 class UserViewSet(viewsets.ModelViewSet):

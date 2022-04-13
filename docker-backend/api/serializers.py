@@ -36,10 +36,6 @@ class ProfileSerializer(serializers.HyperlinkedModelSerializer):
             'registration_date',
         ]
 
-    def get_validation_exclusions(self):
-        exclusions = super(ProfileSerializer, self).get_validation_exclusions()
-        return exclusions + ['password']
-
     def update(self, instance, validated_data):
         if validated_data.get('user'):
             updated_user = validated_data.get('user')
